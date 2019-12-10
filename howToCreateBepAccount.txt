@@ -1,0 +1,22 @@
+
+MEXICO
+1. getOffers
+2. addOrUpdateCar MX --> change cart name here. Cart is 'IN_PROGRESS' status
+3. getCart
+4. addIndividual
+5. addContactMethodAndCustReln --> change address street number, email, phone number, and externalId(taxId : "VESN271206193")
+6. addOrUpdateCart (updateStatus) MX --> update status to "ACCEPTED". Change the cart ID. buyerId is from customerReln from step 5.  Cart is "ACCEPTED" status now.
+7. getRelationship --> relnId is addCustomerReln.relnId from step 5.
+8. requestPaymentTransaction NA --> customerRef is addCustomerReln.relnId from step 5.
+9. addBillingAccount -->paymentReferenceValue is $.data.addCustomerReln.relnId from step 5. 
+						billingPIIRefId is $.data.getRelationship.roles[1].partyRoleId from step 5.
+10. getBillingAccount --> accountNumber is $.data.addBillingAccount.accountNumber from step 9.
+11. addContract --> customerId is $.data.addCustomerReln.relnId from step 5.
+12. createContractInstance --> contractId is $.data.createContractInstance from step 11. signedStatus is "false" now.
+12-1.  sign the contract.  signedStatus is "true" now.
+13. upsertOrderToOM NA (With Line Items) --> update serviceLocationto match to the one in step 5. $sourceCandidateId is  getCart MX -: $.data.getCart.cartItems[1].productCandidateGraph.productCandidates[?(@.kind=='FULFILLMENT')].id
+14. getProductInstancesFromPSM NA (This step is required since step 15 is using values from this step).  state is "ACCEPTED" now	
+15. requestUpsertCharacteristic
+16. requestProductInstanceLifecycleStateChange
+17. getProductInstancesFromPSM NA.  state is "ACTIVE" now.
+18. getProductInstanceFromSPB.  productInstanceStatus is "ACTIVE" now
